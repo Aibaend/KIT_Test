@@ -41,3 +41,37 @@ func GetDictionary(id uint) (map[string] interface{})  {
 	return resp
 
 }
+
+func DeleteDictionary(id uint) (map[string] 	interface{}) {
+	web := &Dictionary{}
+
+	err:=GetDB().Table("dictionaries").Where("id = ?", id).First(web).Error
+	if err!=nil{
+		if err == gorm.ErrRecordNotFound{
+			return u.Message(false,"id is not found")
+		}
+		return u.Message(false, "Connection error. Please retry")
+	}
+
+
+	db.Where("id = ?", id).Delete(&Dictionary{})
+	response := u.Message(true, "Dictionary has been deleted")
+	return response
+}
+
+func (dicti *Dictionary) UpdateDictionary(id uint) (*Dictionary) {
+
+	temp_dicti :=&Dictionary{}
+	err := GetDB().Table("dictionaries").Where("id = ?", id).First(temp_dicti).Error
+	if err != nil {
+		return nil
+	}
+
+	temp_dicti = dicti
+
+	db.Model(&temp_dicti).Where("id = ?", id).Update(dicti)
+
+
+	return temp_dicti
+
+}

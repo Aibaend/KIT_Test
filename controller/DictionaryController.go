@@ -5,6 +5,7 @@ import (
 	u "KIT_Test/utils"
 	"encoding/json"
 	"fmt"
+	"github.com/gorilla/mux"
 	"net/http"
 	"strconv"
 )
@@ -42,4 +43,40 @@ var GetDictionary = func(w http.ResponseWriter, r *http.Request) {
 	data := model.GetDictionary(uint(result))
 
 	u.Respond(w, data)
+}
+
+var DeleteDictionary = func(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	id, err := strconv.Atoi(params["id"])
+	if err !=nil{
+		u.Respond(w, u.Message(false, "There was an error in your request"))
+		return
+	}
+
+	resp := model.DeleteDictionary(uint(id))
+	u.Respond(w, resp)
+}
+
+
+var UpdateDictionary  = func(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	id, err := strconv.Atoi(params["id"])
+	if err != nil {
+		//The passed path parameter is not an integer
+		u.Respond(w, u.Message(false, "There was an error in your request"))
+		return
+	}
+
+	dicti := &model.Dictionary{}
+	err1 := json.NewDecoder(r.Body).Decode(dicti)
+	if err1 != nil {
+		u.Respond(w, u.Message(false, "Invalid request"))
+		return
+	}
+
+	data := dicti.UpdateDictionary(uint(id))
+
+	resp := u.Message(true,"success")
+	resp["data"] = data
+	u.Respond(w, resp)
 }
