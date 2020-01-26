@@ -15,20 +15,10 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
-		notAuth := []string{"/user/create","/user/login","/user/forget/report","/user/forget/verification","/user/forget/change","/user/verification/report","/user/verification","/car/check","/service/get","/page/aboutus","/sent/email"} //List of endpoints that doesn't require auth
+		notAuth := []string{"/user/create","/user/login"} //List of endpoints that doesn't require auth
 		requestPath := r.URL.Path //current request path
-		//check if request does not need authentication, serve the request if it doesn't need it
-		if strings.Contains(requestPath,"/avatar/"){
-			next.ServeHTTP(w,r)
-			return
-		}
-		if strings.Contains(requestPath,"/stock/gets/page"){
-			next.ServeHTTP(w,r)
-			return
-		}
+
 		for _, value := range notAuth {
-
-
 			if value == requestPath  {
 				next.ServeHTTP(w, r)
 				return
