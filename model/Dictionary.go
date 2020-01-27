@@ -75,3 +75,10 @@ func (dicti *Dictionary) UpdateDictionary(id uint) (*Dictionary) {
 	return temp_dicti
 
 }
+
+func FindDictionary(keyword string)  ([]*Dictionary){
+	dicts := []*Dictionary{}
+	db.Where("name LIKE ?", "%"+keyword+"%").Find(&dicts)
+
+	return dicts
+}

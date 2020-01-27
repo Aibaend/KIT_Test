@@ -80,3 +80,21 @@ var UpdateDictionary  = func(w http.ResponseWriter, r *http.Request) {
 	resp["data"] = data
 	u.Respond(w, resp)
 }
+
+var FindDictionaryElement  = func(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	keyword, _ := params["word"]
+	if keyword ==""{
+		u.Respond(w,u.Message(false,"Keyword is empty"))
+		return
+	}
+	data := model.FindDictionary(keyword)
+	if len(data) == 0{
+		resp := u.Message(false,"Data is not found")
+		u.Respond(w,resp)
+	}else {
+		resp := u.Message(true, "success")
+		resp["data"] = data
+		u.Respond(w, resp)
+	}
+}

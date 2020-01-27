@@ -11,4 +11,5 @@ func SetupRoutes(router *mux.Router)() {
 	router.HandleFunc("/dictionary/get",controller.GetDictionary).Methods("GET")
 	router.HandleFunc("/dictionary/delete/id:{id}",controller.DeleteDictionary).Methods("DELETE")
 	router.HandleFunc("/dictionary/update/id:{id}",controller.UpdateDictionary).Methods("PUT")
+	router.HandleFunc("/dictionary/find/{word}",controller.FindDictionaryElement).Methods("GET")
 }
