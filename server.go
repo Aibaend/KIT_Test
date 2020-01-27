@@ -24,6 +24,7 @@ func main()  {
 		log.Println(err1)
 	}
 	defer f.Close()
+	log.SetOutput(f)
 
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -31,8 +32,8 @@ func main()  {
 	}
 	//handler := LogMiddleware(router)
 	fmt.Println("Server is running on port 8078")
-
-	err := http.ListenAndServe(":" + port,CorsMiddleware(router)) //Launch the app, visit localhost:8000/api
+	handler := CorsMiddleware(router)
+	err := http.ListenAndServe(":" + port,handler)
 	if err != nil {
 		fmt.Print(err)
 	}
